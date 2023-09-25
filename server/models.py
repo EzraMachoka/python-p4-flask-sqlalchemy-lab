@@ -7,17 +7,25 @@ metadata = MetaData(naming_convention={
 
 db = SQLAlchemy(metadata=metadata)
 
-class Zookeeper(db.Model):
-    __tablename__ = 'zookeepers'
+class Owner(db.Model):
+    __tablename__ = 'owners'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True)
 
-class Enclosure(db.Model):
-    __tablename__ = 'enclosures'
+    pets = db.relationship('Pet', backref='owner')
+
+    def __repr__(self):
+        return f'<Pet Owner {self.name}>'
+    
+class Pet(db.Model):
+    __tablename__ = 'pets'
 
     id = db.Column(db.Integer, primary_key=True)
+    name =db.Column(db.String)
+    species = db.Column(db.String)
 
-class Animal(db.Model):
-    __tablename__ = 'animals'
+    owner_id  = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
-    id = db.Column(db.Integer, primary_key=True)
+    def __repr__(self):
+        return f'<Pet {self.name}, {self.species}>'
